@@ -26,3 +26,40 @@ weighted avg       0.98      0.98      0.98      1146
                                                    text  spam
 1411  Subject: investment  to all whom it may concer...     0
 2157  Subject: research family outing and volleyball...     0
+
+====================
+
+--- EVALUATION REPORT ---
+              precision    recall  f1-score   support
+
+         0.0       0.98      1.00      0.99       856
+         1.0       0.99      0.93      0.96       290
+
+    accuracy                           0.98      1146
+   macro avg       0.98      0.96      0.97      1146
+weighted avg       0.98      0.98      0.98      1146
+
+--- CONFUSION MATRIX ---
+[[852   4]
+ [ 20 270]]
+
+ Test LR = 0.0001 -> No significant change
+
+====================
+
+--- EVALUATION REPORT ---
+              precision    recall  f1-score   support
+
+         0.0       0.98      1.00      0.99       856
+         1.0       0.99      0.95      0.97       290
+
+    accuracy                           0.99      1146
+   macro avg       0.99      0.97      0.98      1146
+weighted avg       0.99      0.99      0.99      1146
+
+--- CONFUSION MATRIX ---
+[[853   3]
+ [ 14 276]]
+
+ Test with one more layer to the model, LR back to 0.001 -> no significant change
+ TP: 270 -> 276: more spams found

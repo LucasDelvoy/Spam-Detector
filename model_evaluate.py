@@ -42,8 +42,9 @@ print("\n --- LOST MAILS ---")
 print(lost_mails)
 
 report = classification_report(y_test_np, y_pred_np)
-with open("output/evaluation_report.txt", "w") as f:
-    f.write("--- EVALUATION REPORT ---\n")
+with open("output/evaluation_report.txt", "a") as f:
+    f.write("\n====================\n")
+    f.write("\n--- EVALUATION REPORT ---\n")
     f.write(report)
     f.write("\n--- CONFUSION MATRIX ---\n")
     f.write(str(confusion_matrix(y_test_np, y_pred_np)))
