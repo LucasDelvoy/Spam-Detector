@@ -1,0 +1,28 @@
+--- EVALUATION REPORT ---
+              precision    recall  f1-score   support
+
+         0.0       0.98      1.00      0.99       856
+         1.0       0.99      0.94      0.97       290
+
+    accuracy                           0.98      1146
+   macro avg       0.99      0.97      0.98      1146
+weighted avg       0.98      0.98      0.98      1146
+
+--- CONFUSION MATRIX ---
+[[854   2]
+ [ 17 273]]
+
+
+
+--- EXAMPLES OF UNDETECTED SPAM ---
+                                                  text  spam
+401  Subject: nymex invitation - learn power tradin...     1
+333  Subject: benachrichtung  zum  ( fehlgeschlagen...     1
+79   Subject: join focus groups to earn money  a la...     1
+926  Subject: business joint venture  perhaps you a...     1
+530  Subject: out of office autoreply : just to her...     1
+
+--- LOST MAILS ---
+                                                   text  spam
+1411  Subject: investment  to all whom it may concer...     0
+2157  Subject: research family outing and volleyball...     0
