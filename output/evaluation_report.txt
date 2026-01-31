@@ -63,3 +63,112 @@ weighted avg       0.99      0.99      0.99      1146
 
  Test with one more layer to the model, LR back to 0.001 -> no significant change
  TP: 270 -> 276: more spams found
+ Analysis of the 3 mails going to spam. 2 are very short, 1 very long
+====================
+
+--- EVALUATION REPORT ---
+              precision    recall  f1-score   support
+
+         0.0       0.97      1.00      0.99       856
+         1.0       0.99      0.92      0.96       290
+
+    accuracy                           0.98      1146
+   macro avg       0.98      0.96      0.97      1146
+weighted avg       0.98      0.98      0.98      1146
+
+--- CONFUSION MATRIX ---
+[[854   2]
+ [ 22 268]]
+
+ threshold to 0.7 -> 1 less mail going to spam, but 8 more spams going to mail
+====================
+
+--- EVALUATION REPORT ---
+              precision    recall  f1-score   support
+
+         0.0       0.97      1.00      0.99       856
+         1.0       1.00      0.92      0.96       290
+
+    accuracy                           0.98      1146
+   macro avg       0.98      0.96      0.97      1146
+weighted avg       0.98      0.98      0.98      1146
+
+--- CONFUSION MATRIX ---
+[[855   1]
+ [ 24 266]]
+
+text cleaning, just 1 mail going to spam. However, the system is more leniant towards spam going to the mails
+====================
+
+--- EVALUATION REPORT ---
+              precision    recall  f1-score   support
+
+         0.0       0.98      1.00      0.99       856
+         1.0       0.99      0.94      0.97       290
+
+    accuracy                           0.98      1146
+   macro avg       0.99      0.97      0.98      1146
+weighted avg       0.98      0.98      0.98      1146
+
+--- CONFUSION MATRIX ---
+[[854   2]
+ [ 16 274]]
+
+sublinear_tf=True, 
+max_features=5000, 
+ngram_range=(1, 2), 
+min_df=2
+====================
+
+--- EVALUATION REPORT ---
+              precision    recall  f1-score   support
+
+         0.0       0.99      1.00      0.99       856
+         1.0       0.99      0.96      0.97       290
+
+    accuracy                           0.99      1146
+   macro avg       0.99      0.98      0.98      1146
+weighted avg       0.99      0.99      0.99      1146
+
+--- CONFUSION MATRIX ---
+[[854   2]
+ [ 13 277]]
+
+sublinear_tf=True, 
+max_features=10000, 
+ngram_range=(1, 2), 
+min_df=3
+====================
+
+--- EVALUATION REPORT ---
+              precision    recall  f1-score   support
+
+         0.0       0.98      1.00      0.99       856
+         1.0       1.00      0.94      0.97       290
+
+    accuracy                           0.98      1146
+   macro avg       0.99      0.97      0.98      1146
+weighted avg       0.98      0.98      0.98      1146
+
+--- CONFUSION MATRIX ---
+[[855   1]
+ [ 17 273]]
+
+ threshold 0.8
+====================
+
+--- EVALUATION REPORT ---
+              precision    recall  f1-score   support
+
+         0.0       0.96      1.00      0.98       856
+         1.0       1.00      0.88      0.94       290
+
+    accuracy                           0.97      1146
+   macro avg       0.98      0.94      0.96      1146
+weighted avg       0.97      0.97      0.97      1146
+
+--- CONFUSION MATRIX ---
+[[855   1]
+ [ 34 256]]
+
+ threshold 0.85

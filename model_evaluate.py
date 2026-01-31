@@ -20,7 +20,7 @@ model.eval()
 
 with torch.no_grad():
     raw_predictions = model(X_test)
-    y_pred = (raw_predictions > 0.5).int()
+    y_pred = (raw_predictions > 0.80).int()
 
 y_test_np = y_test.numpy().flatten()
 y_pred_np = y_pred.numpy().flatten()
