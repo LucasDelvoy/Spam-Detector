@@ -1,9 +1,19 @@
 import joblib
-from torch import nn, optim, FloatTensor, load
+import nltk
+import re
+from torch import nn, optim, FloatTensor, load, no_grad
 from typing import Union
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, Form
+from nltk.corpus import stopwords
+from sklearn.feature_extraction.text import TfidfVectorizer
+from pydantic import BaseModel
 
 app = FastAPI()
+empty_words = nltk.download("stopwords")
+stopwords_list = set(stopwords.words("english"))
+
+class EmailInput(BaseModel):
+    email: str
 
 class Model(nn.Module):
     def __init__(self) -> None:
@@ -37,6 +47,15 @@ except Exception as e:
     
 vectorizer = joblib.load("../output/vectorizer.pkl")
 
+def clean_text(text):
+    txt = text.lower()
+    x = re.sub(r'[^a-zA-Z]', " ", txt)
+    words = x.split()
+
+    clean_words = [word for word in words if word not in stopwords_list]
+    cleaned_text = " ".join(clean_words)
+    return cleaned_text
+
 @app.get("/")
 async def read_root():
     return{"Hello": "World"}
@@ -47,3 +66,18 @@ async def read_health():
         return("Model Loaded")
     else:
         return("Error, model not loaded")
+
+@app.post("/predict")
+async def read_predict(request: Request, payload: EmailInput):
+    
+    cleaned_mail = clean_text(payload.email)
+    vect_mail = vectorizer.transform([cleaned_mail])
+    mail = FloatTensor(vect_mail.toarray())
+    
+    with no_grad():
+        score = model(mail)
+
+        if score.item() > 0.8:
+            return {"status": "spam"}
+        else:
+            return {"status": "mail"}
