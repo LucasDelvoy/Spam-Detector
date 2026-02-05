@@ -69,7 +69,19 @@ async def read_health():
 
 @app.post("/predict")
 async def read_predict(request: Request, payload: EmailInput):
+
+    if not payload.email:
+        return "Error", 400
     
+    if payload.email == None:
+        return "Email not found", 400
+    
+    if payload.email.item() is not str:
+        return "Please write a correct mail", 400
+    
+    if len(payload.email) >= 5000:
+        return "The mail is too long (max 5k subscribers)", 400
+
     cleaned_mail = clean_text(payload.email)
     vect_mail = vectorizer.transform([cleaned_mail])
     mail = FloatTensor(vect_mail.toarray())
