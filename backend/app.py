@@ -3,7 +3,7 @@ import nltk
 import re
 from torch import nn, optim, FloatTensor, load, no_grad
 from typing import Union
-from fastapi import FastAPI, Request, Form
+from fastapi import FastAPI, Request, Form, HTTPException
 from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import TfidfVectorizer
 from pydantic import BaseModel
@@ -56,6 +56,20 @@ def clean_text(text):
     cleaned_text = " ".join(clean_words)
     return cleaned_text
 
+def prediction(score):
+
+    if score.item() > 0.95:
+        return "Obvious Spam"
+    
+    elif 0.8 <= score.item() <= 0.95:
+        return "Potential Spam"
+    
+    elif 0.6 <= score.item() < 0.8:
+        return "Suspicious Mail"
+    
+    else:
+        return "Mail"
+
 @app.get("/")
 async def read_root():
     return{"Hello": "World"}
@@ -70,17 +84,14 @@ async def read_health():
 @app.post("/predict")
 async def read_predict(request: Request, payload: EmailInput):
 
-    if not payload.email:
-        return "Error", 400
+    if not payload.email.strip():
+        return HTTPException(status_code=400, detail="Email is empty")
     
-    if payload.email == None:
-        return "Email not found", 400
-    
-    if payload.email.item() is not str:
-        return "Please write a correct mail", 400
+    if not isinstance(payload.email, str):
+        return HTTPException(status_code=400, detail="Please write a correct email")
     
     if len(payload.email) >= 5000:
-        return "The mail is too long (max 5k subscribers)", 400
+        return HTTPException(status_code=400, detail="Email is too long (max 5k characters)")
 
     cleaned_mail = clean_text(payload.email)
     vect_mail = vectorizer.transform([cleaned_mail])
@@ -88,8 +99,14 @@ async def read_predict(request: Request, payload: EmailInput):
     
     with no_grad():
         score = model(mail)
+        score_percentage = "{:.1%}".format(score.item())
+        result = prediction(score)
 
         if score.item() > 0.8:
-            return {"status": "spam"}
+            return {"status": "spam",
+                    "score": score_percentage,
+                    "prediction": result}
         else:
-            return {"status": "mail"}
+            return {"status": "mail",
+                    "score": score_percentage,
+                    "prediction": result}
