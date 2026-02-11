@@ -12,8 +12,8 @@ function Index () {
         setLoading(true)
         setMailResult(null)
 
+        e.preventDefault()
         try {
-            e.preventDefault()
             const mailForm = await fetch('http://127.0.0.1:8000/predict', {
                 method: 'POST',
                 headers: {
@@ -26,10 +26,12 @@ function Index () {
                 const data = await mailForm.json()
                 setMailResult(data)
             } else {
-                setError("Sorry, something happened")
+                setMailResult(null)
+                const errorData = await mailForm.json()
+                setError(errorData.detail)
             }
         } catch {
-            setError("Couldn't connect to the server")
+            setError("500 Internal Server Error")
         } finally {
             setLoading(false)
         }
@@ -42,7 +44,7 @@ function Index () {
         <>
             <form onSubmit={handleSubmit}>
                 <textarea value={emailContent} onChange={(e) => setEmailContent(e.target.value)}></textarea>
-                <button type='submit'>Predict</button>
+                <button type='submit' disabled={loading || !emailContent || emailContent.length > 5000}>Predict</button>
             </form>
             {mailResult ? (
                 <ul>
@@ -51,8 +53,11 @@ function Index () {
                     <li>Conclusion: {mailResult.prediction}</li>
                 </ul>
             ) : (
-                <p>Please copy a mail into the text area.</p>
+                <p>Please copy a mail into the text area. Mail must be under 5000 characters</p>
             )}
+            {error ? (
+                <p>{error}</p>
+            ) : null }
         </>
     )
 }
